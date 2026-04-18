@@ -233,12 +233,69 @@ void updatePosition3(int value) {
 
 
 
-  // Boat position
+  // ==================== NEW ALGORITHM-BASED FEATURES ====================
 
+void drawWaterReflection() {
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    
+    // Reflect buildings in water using reflectX logic
+    glPushMatrix();
+    // Move to reflection axis (approx 150) and flip
+    glTranslatef(0, 150, 0);
+    glScalef(1.0, -0.6, 1.0); // Simple visual reflection
+    glTranslatef(0, -150, 0);
+    
+    // Dimmed and transparent color for reflection
+    glColor4f(0.5f, 0.5f, 0.7f, 0.3f); 
+    // We could call drawbuilding() here if we want everything reflected
+    // drawbuilding(); 
+    glPopMatrix();
+    
+    glDisable(GL_BLEND);
+}
+
+void drawShearedCar() {
+    float carX = 600, carY = 180;
+    float shx = 0.3, shy = 0.0;
+    
+    glPushMatrix();
+    glTranslatef(carX, carY, 0);
+    
+    // Define car vertices
+    float p1x = -30, p1y = 0;
+    float p2x = 30, p2y = 0;
+    float p3x = 30, p3y = 20;
+    float p4x = -30, p4y = 20;
+    
+    // Apply manual shear algorithm
+    applyShear(p1x, p1y, shx, shy);
+    applyShear(p2x, p2y, shx, shy);
+    applyShear(p3x, p3y, shx, shy);
+    applyShear(p4x, p4y, shx, shy);
+    
+    // Draw sheared body
+    glColor3ub(0, 200, 255);
+    glBegin(GL_QUADS);
+    glVertex2f(p1x, p1y);
+    glVertex2f(p2x, p2y);
+    glVertex2f(p3x, p3y);
+    glVertex2f(p4x, p4y);
+    glEnd();
+    
+    // Wheels using Midpoint Circle (must be after shear or non-sheared depending on desired look)
+    glColor3ub(0, 0, 0);
+    drawMidpointCircle(-20, 0, 8);
+    drawMidpointCircle(20, 0, 8);
+    
+    glPopMatrix();
+}
 
 void drawSunAndClouds() {
 
     glEnd();
+
+    drawWaterReflection(); // Injecting algorithm-based reflection
 
     glBegin(GL_QUADS);
     glColor3ub(isNight ? 0 : 0, isNight ? 0 : 119, isNight ? 60 : 190);
@@ -310,6 +367,11 @@ for (int i = 0; i <= 145; i += 15) { // Adjust stripe spacing
     float rightX = 460 - (i / 3.5);  // Right side shifts inward to match perspective
     drawDDALine(leftX, i, rightX, i);
 }
+
+// Outline the bridge using Bresenham
+glColor3ub(210, 105, 30);
+drawBresenhamLine(370, 0, 400, 150); // Left edge
+drawBresenhamLine(460, 0, 430, 150); // Right edge
 
 
 
@@ -540,6 +602,13 @@ circle(14, 30, 360, 710);  // Adjusted shadow position accordingly
     glVertex2f(110,475);
     glVertex2f(50,475);
     glEnd();
+
+    // Outline using Bresenham Algorithm
+    glColor3ub(100, 100, 100);
+    drawBresenhamLine(50, 90, 110, 90);
+    drawBresenhamLine(110, 90, 110, 475);
+    drawBresenhamLine(110, 475, 50, 475);
+    drawBresenhamLine(50, 475, 50, 90);
 
     glBegin(GL_QUADS);
     glColor3ub(242, 242, 242);

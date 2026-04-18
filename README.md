@@ -19,32 +19,32 @@ A feature-rich **3D city simulation** developed using **OpenGL and C++**. This p
 
 ## 📐 Computer Graphics Algorithms Used
 
-This project is built upon core graphics algorithms rather than relying solely on built-in drawing functions. Each section of the city demonstrates a specific algorithmic concept:
+This project demonstrates the manual implementation of core computer graphics algorithms, replacing standard OpenGL primitives for key scene components:
 
 ### 1. Bresenham's Line Algorithm
 - **Usage**: Drawing structural elements with high precision.
 - **Implementation**: Used for **Lamp posts**, **Traffic light poles**, and **Building outlines**.
-- **Mode**: Integer-based incremental error calculation for efficient straight lines.
+- **Function**: `drawBresenhamLine(x1, y1, x2, y2)` - Integer-based incremental error calculation.
 
 ### 2. DDA (Digital Differential Analyzer)
-- **Usage**: Rendering smooth, continuous lines.
+- **Usage**: Rendering smooth lines for perspective.
 - **Implementation**: Used for **Bridge planks**, **Crosswalk stripes**, and **Road markings**.
-- **Mode**: Floating-point incremental steps for smooth visual continuity.
+- **Function**: `drawDDALine(x1, y1, x2, y2)` - Floating-point incremental steps.
 
 ### 3. Midpoint Circle Algorithm
 - **Usage**: Efficient circle rendering without trigonometric functions.
 - **Implementation**: Used for the **Sun**, **Moon**, **Car wheels**, **Clouds**, and **Traffic light bulbs**.
-- **Mode**: Symmetric 8-way plotting for optimized performance.
+- **Function**: `drawMidpointCircle(cx, cy, radius)` - Symmetric 8-way plotting.
 
 ### 4. Reflection Transformation
-- **Usage**: Creating environmental symmetry.
-- **Implementation**: Applied to the **Water/River** area to create a reflection effect for the city skyline.
-- **Mode**: Coordinate inversion across a specific axis.
+- **Usage**: Environmental symmetry in the river.
+- **Implementation**: Applied to **Building reflections** in the water area (Y=150).
+- **Function**: `reflectX(x, y, axisY)` - Manual coordinate reflection.
 
 ### 5. Shear Transformation
-- **Usage**: Specialized animation effects.
-- **Implementation**: Used for the **Slanted Car animation** to demonstrate non-rigid body movement.
-- **Mode**: Linear mapping that displaces points in a fixed direction.
+- **Usage**: Aerodynamic styling for vehicles.
+- **Implementation**: Applied to the **"Special Sheared Car"** for a unique slanted look.
+- **Function**: `applyShear(x, y, shx, shy)` - Manual coordinate shearing.
 
 ---
 
