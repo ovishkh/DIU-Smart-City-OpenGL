@@ -115,6 +115,7 @@ The simulation is fully interactive and can be controlled using the keyboard.
 
 ## ℹ Notes
 - This is a simulation-based academic project
+- Developed by **Ovi Shekh**
 - Focused on graphics rendering and interactive logic
 - No real-world physics or AI systems are implemented
 

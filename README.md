@@ -12,7 +12,8 @@ A feature-rich **3D city simulation** developed using **OpenGL and C++**. This p
 - **`/src`**: Contains the primary source code (`main.cpp`) optimized for Windows/Code::Blocks.
 - **`/mac`**: Contains `main.cpp` optimized for macOS (framework-based GLUT).
 - **`/model`**: Contains the Code::Blocks project file (`.cbp`) and build configurations.
-- **`/docs`**: Archive of documentation and previous versions (`v1.cpp`).
+- **`/docs`**: Project documentation and feature guides (`docs.md`).
+- **`/old`**: Archive of previous stable versions (`base.cpp`).
 
 ---
 
@@ -99,4 +100,4 @@ You can easily modify the city simulation by editing the variables and functions
 ---
 
 ## 📧 About
-Developed as part of the Computer Graphics Course to demonstrate the practical application of 2D/3D algorithms in a simulated environment.
+Developed by **Ovi Shekh** as part of the Computer Graphics Course to demonstrate the practical application of 2D/3D algorithms in a simulated environment.
