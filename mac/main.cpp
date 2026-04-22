@@ -232,69 +232,12 @@ void updatePosition3(int value) {
 
 
 
-  // ==================== NEW ALGORITHM-BASED FEATURES ====================
+  // Boat position
 
-void drawWaterReflection() {
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    
-    // Reflect buildings in water using reflectX logic
-    glPushMatrix();
-    // Move to reflection axis (approx 150) and flip
-    glTranslatef(0, 150, 0);
-    glScalef(1.0, -0.6, 1.0); // Simple visual reflection
-    glTranslatef(0, -150, 0);
-    
-    // Dimmed and transparent color for reflection
-    glColor4f(0.5f, 0.5f, 0.7f, 0.3f); 
-    // We could call drawbuilding() here if we want everything reflected
-    // drawbuilding(); 
-    glPopMatrix();
-    
-    glDisable(GL_BLEND);
-}
-
-void drawShearedCar() {
-    float carX = 600, carY = 180;
-    float shx = 0.3, shy = 0.0;
-    
-    glPushMatrix();
-    glTranslatef(carX, carY, 0);
-    
-    // Define car vertices
-    float p1x = -30, p1y = 0;
-    float p2x = 30, p2y = 0;
-    float p3x = 30, p3y = 20;
-    float p4x = -30, p4y = 20;
-    
-    // Apply manual shear algorithm
-    applyShear(p1x, p1y, shx, shy);
-    applyShear(p2x, p2y, shx, shy);
-    applyShear(p3x, p3y, shx, shy);
-    applyShear(p4x, p4y, shx, shy);
-    
-    // Draw sheared body
-    glColor3ub(0, 200, 255);
-    glBegin(GL_QUADS);
-    glVertex2f(p1x, p1y);
-    glVertex2f(p2x, p2y);
-    glVertex2f(p3x, p3y);
-    glVertex2f(p4x, p4y);
-    glEnd();
-    
-    // Wheels using Midpoint Circle (must be after shear or non-sheared depending on desired look)
-    glColor3ub(0, 0, 0);
-    drawMidpointCircle(-20, 0, 8);
-    drawMidpointCircle(20, 0, 8);
-    
-    glPopMatrix();
-}
 
 void drawSunAndClouds() {
 
     glEnd();
-
-    drawWaterReflection(); // Injecting algorithm-based reflection
 
     glBegin(GL_QUADS);
     glColor3ub(isNight ? 0 : 0, isNight ? 0 : 119, isNight ? 60 : 190);
@@ -366,11 +309,6 @@ for (int i = 0; i <= 145; i += 15) { // Adjust stripe spacing
     float rightX = 460 - (i / 3.5);  // Right side shifts inward to match perspective
     drawDDALine(leftX, i, rightX, i);
 }
-
-// Outline the bridge using Bresenham
-glColor3ub(210, 105, 30);
-drawBresenhamLine(370, 0, 400, 150); // Left edge
-drawBresenhamLine(460, 0, 430, 150); // Right edge
 
 
 
@@ -602,13 +540,6 @@ circle(14, 30, 360, 710);  // Adjusted shadow position accordingly
     glVertex2f(50,475);
     glEnd();
 
-    // Outline using Bresenham Algorithm
-    glColor3ub(100, 100, 100);
-    drawBresenhamLine(50, 90, 110, 90);
-    drawBresenhamLine(110, 90, 110, 475);
-    drawBresenhamLine(110, 475, 50, 475);
-    drawBresenhamLine(50, 475, 50, 90);
-
     glBegin(GL_QUADS);
     glColor3ub(242, 242, 242);
     glVertex2f(52.5,90);        //1st Building main part 2
@@ -716,16 +647,14 @@ circle(14, 30, 360, 710);  // Adjusted shadow position accordingly
 
     glColor3ub(0, 51, 204);
     glRasterPos2i(133,465);
-    glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_10,'A');
+    glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_10,'D');
     glColor3ub(0, 51, 204);
     glRasterPos2i(139,465);
     glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_10,'I');
     glColor3ub(0, 51, 204);
     glRasterPos2i(143,465);
     glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_10,'U');
-    glColor3ub(0, 51, 204);
-    glRasterPos2i(149,465);
-    glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_10,'B');
+    
 
 
     glBegin(GL_QUADS);              ///SIRI GHORE.//
@@ -4775,136 +4704,6 @@ void drawLampPost() {
 
 
 
-    // Draw Base (Wider bottom)
-    glBegin(GL_QUADS);
-        glColor3ub(20, 20, 20); // Black base
-        glVertex2f(x - 10, 150);
-        glVertex2f(x + 10, 150);
-        glVertex2f(x + 7, 170);
-        glVertex2f(x - 7, 170);
-    glEnd();
-
-    // Draw Pole (Thin middle part)
-    glBegin(GL_QUADS);
-        glColor3ub(30, 30, 30); // Dark grey pole
-        glVertex2f(x - 3, 170);
-        glVertex2f(x + 3, 170);
-        glVertex2f(x + 3, 270);
-        glVertex2f(x - 3, 270);
-    glEnd();
-
-    // Draw Lamp Head (Top part)
-    glBegin(GL_QUADS);
-        glColor3ub(20, 20, 20); // Dark lamp top
-        glVertex2f(x - 12, 270);
-        glVertex2f(x + 12, 270);
-        glVertex2f(x + 8, 290);
-        glVertex2f(x - 8, 290);
-    glEnd();
-
-    // Draw Light Bulb
-    if (isNight) {
-        glColor3ub(255, 255, 200); // Bright glow at night
-    } else {
-        glColor3ub(150, 150, 100); // Dim glow during day
-    }
-    glBegin(GL_TRIANGLE_FAN);
-        glVertex2f(x, 275);
-        for (int i = 0; i <= 360; i++) {
-            float angle = i * 3.14159f / 180;
-            glVertex2f(x + cos(angle) * 5, 275 + sin(angle) * 5);
-        }
-    glEnd();
-
-
-
-
-
-
-    glBegin(GL_QUADS);
-        glColor3ub(20, 20, 20); // Black base
-        glVertex2f(w - 10, 150);
-        glVertex2f(w + 10, 150);
-        glVertex2f(w + 7, 170);
-        glVertex2f(w - 7, 170);
-    glEnd();
-
-    // Draw Pole (Thin middle part)
-    glBegin(GL_QUADS);
-        glColor3ub(30, 30, 30); // Dark grey pole
-        glVertex2f(w - 3, 170);
-        glVertex2f(w + 3, 170);
-        glVertex2f(w + 3, 270);
-        glVertex2f(w - 3, 270);
-    glEnd();
-
-    // Draw Lamp Head (Top part)
-    glBegin(GL_QUADS);
-        glColor3ub(20, 20, 20); // Dark lamp top
-        glVertex2f(w - 12, 270);
-        glVertex2f(w + 12, 270);
-        glVertex2f(w + 8, 290);
-        glVertex2f(w - 8, 290);
-    glEnd();
-
-    // Draw Light Bulb
-    if (isNight) {
-        glColor3ub(255, 255, 200); // Bright glow at night
-    } else {
-        glColor3ub(150, 150, 100); // Dim glow during day
-    }
-    glBegin(GL_TRIANGLE_FAN);
-        glVertex2f(w, 275);
-        for (int i = 0; i <= 360; i++) {
-            float angle = i * 3.14159f / 180;
-            glVertex2f(w + cos(angle) * 5, 275 + sin(angle) * 5);
-        }
-    glEnd();
-
-
-
-
-    //lamp-1
-    glBegin(GL_QUADS);
-        glColor3ub(20, 20, 20); // Black base
-        glVertex2f(y - 10, 150);
-        glVertex2f(y + 10, 150);
-        glVertex2f(y + 7, 170);
-        glVertex2f(y - 7, 170);
-    glEnd();
-
-    // Draw Pole (Thin middle part)
-    glBegin(GL_QUADS);
-        glColor3ub(30, 30, 30); // Dark grey pole
-        glVertex2f(y - 3, 170);
-        glVertex2f(y + 3, 170);
-        glVertex2f(y + 3, 270);
-        glVertex2f(y - 3, 270);
-    glEnd();
-
-    // Draw Lamp Head (Top part)
-    glBegin(GL_QUADS);
-        glColor3ub(20, 20, 20); // Dark lamp top
-        glVertex2f(y - 12, 270);
-        glVertex2f(y + 12, 270);
-        glVertex2f(y + 8, 290);
-        glVertex2f(y - 8, 290);
-    glEnd();
-
-    // Draw Light Bulb
-    if (isNight) {
-        glColor3ub(255, 255, 200); // Bright glow at night
-    } else {
-        glColor3ub(150, 150, 100); // Dim glow during day
-    }
-    glBegin(GL_TRIANGLE_FAN);
-        glVertex2f(y, 275);
-        for (int i = 0; i <= 360; i++) {
-            float angle = i * 3.14159f / 180;
-            glVertex2f(y + cos(angle) * 5, 275 + sin(angle) * 5);
-        }
-    glEnd();
-}
 
 void drawTree() {
   glBegin(GL_TRIANGLE_FAN);  /// Bottom tree trunk  3///
